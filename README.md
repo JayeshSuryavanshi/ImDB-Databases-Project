@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# IMDb Databases Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React web application for exploring an IMDb-style movies and TV database. The
+app provides a simple UI for running SQL queries against a backend database API
+and for browsing curated views such as top-rated movies, top-rated TV series,
+top directors, and titles by genre.
+
+This is the front-end client for a course database project (CSE4/560
+"Triangulation" milestone). The accompanying milestone report is included as
+`CSE4_560_Milestone2_Triangulation.pdf`.
+
+## Overview
+
+The application is a single-page React app built with Create React App and
+Material UI. It talks to a separate HTTP backend that accepts SQL queries and
+returns column/row data, which the app renders in paginated tables.
+
+The backend endpoint is currently hard-coded in `src/App.js` as a `POST` to
+`http://34.229.0.41:5000/query` with a JSON body of the form
+`{ "query": "<SQL>" }`, and it expects a JSON response of the form
+`{ "columns": [...], "rows": [...] }`. To run against your own backend, update
+that URL in `src/App.js`.
+
+## Features
+
+- **Free-form SQL query** - enter any SQL query in a text box and view the
+  results in a table.
+- **Top N movies** - list the highest-rated movies (`title_type = 'movie'`,
+  `num_votes > 1000`).
+- **Top N TV series** - list the highest-rated TV series
+  (`title_type = 'tvSeries'`, `num_votes > 1000`).
+- **Top N directors** - list directors ranked by the average rating of their
+  titles.
+- **Titles by genre** - pick a genre from a dropdown and list matching titles.
+- **Paginated results** - all result sets are shown in a paginated, resizable
+  table.
+
+## Tech Stack
+
+- [React 18](https://react.dev/) (class components)
+- [Create React App](https://create-react-app.dev/) / `react-scripts`
+- [Material UI (MUI) v5](https://mui.com/) and Material UI v4 for UI components
+- [`react-table-6`](https://www.npmjs.com/package/react-table-6) for rendering
+  result tables
+- Browser `fetch` for backend communication
+- A backend SQL query API (not included in this repository)
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (a current LTS release is recommended)
+- npm (bundled with Node.js)
+- Access to a running backend query API (see [Overview](#overview))
+
+### Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/JayeshSuryavanshi/ImDB-Databases-Project.git
+cd ImDB-Databases-Project
+npm install
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
+The page reloads when you make edits, and lint errors appear in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in interactive watch mode.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds the app for production to the `build` folder, minified and ready to
+deploy.
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Removes the single build dependency and copies all configuration into the
+project. **This is a one-way operation.**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+ImDB-Databases-Project/
+├── public/                  # Static assets and HTML template
+├── src/
+│   ├── App.js               # Main component: query UI and backend calls
+│   ├── TableComponent.js    # Renders query results in a paginated table
+│   ├── index.js             # React entry point
+│   ├── App.css / index.css  # Styles
+│   └── ...                  # CRA boilerplate (tests, web vitals, etc.)
+├── package.json
+└── CSE4_560_Milestone2_Triangulation.pdf  # Project milestone report
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Notes
 
-## Learn More
+- The backend API URL is hard-coded in `src/App.js`; change it to point at your
+  own database service.
+- This client builds raw SQL strings from user input for the curated views;
+  it is intended for use as a course project against a trusted internal
+  backend, not as a production application.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+No license file is currently provided. Please contact the repository owner
+before reusing this code.

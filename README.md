@@ -11,15 +11,15 @@ This is the front-end client for a course database project (CSE4/560
 
 ## Overview
 
-The application is a single-page React app built with Create React App and
-Material UI. It talks to a separate HTTP backend that accepts SQL queries and
-returns column/row data, which the app renders in paginated tables.
+The application is a single-page React app built with Vite and Material UI. It
+talks to a separate HTTP backend that accepts SQL queries and returns
+column/row data, which the app renders in paginated tables.
 
-The backend endpoint is currently hard-coded in `src/App.js` as a `POST` to
+The backend endpoint is currently hard-coded in `src/App.jsx` as a `POST` to
 `http://34.229.0.41:5000/query` with a JSON body of the form
 `{ "query": "<SQL>" }`, and it expects a JSON response of the form
 `{ "columns": [...], "rows": [...] }`. To run against your own backend, update
-that URL in `src/App.js`.
+that URL in `src/App.jsx`.
 
 ## Features
 
@@ -38,7 +38,8 @@ that URL in `src/App.js`.
 ## Tech Stack
 
 - [React 18](https://react.dev/) (class components)
-- [Create React App](https://create-react-app.dev/) / `react-scripts`
+- [Vite](https://vite.dev/) for the dev server and production build
+- [Vitest](https://vitest.dev/) and React Testing Library for tests
 - [Material UI (MUI) v5](https://mui.com/) and Material UI v4 for UI components
 - [`react-table-6`](https://www.npmjs.com/package/react-table-6) for rendering
   result tables
@@ -49,7 +50,8 @@ that URL in `src/App.js`.
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (a current LTS release is recommended)
+- [Node.js](https://nodejs.org/) 22.22.2+, 24.15+ or 26+ (Vite 8, Vitest 5 and
+  jsdom 30 need a recent release)
 - npm (bundled with Node.js)
 - Access to a running backend query API (see [Overview](#overview))
 
@@ -67,49 +69,65 @@ npm install
 
 In the project directory you can run:
 
-### `npm start`
+### `npm run dev`
 
-Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
-The page reloads when you make edits, and lint errors appear in the console.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
+Starts the Vite dev server at [http://localhost:5173](http://localhost:5173).
+Edits show up in the browser straight away.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder, minified and ready to
+Builds the app for production into the `dist` folder, minified and ready to
 deploy.
 
-### `npm run eject`
+### `npm run preview`
 
-Removes the single build dependency and copies all configuration into the
-project. **This is a one-way operation.**
+Serves the production build from `dist` at
+[http://localhost:4173](http://localhost:4173) so you can check it before
+deploying. Run `npm run build` first.
+
+### `npm test`
+
+Runs the tests once with Vitest in a jsdom environment. Use
+`npm run test:watch` to keep Vitest running and re-test on every change.
 
 ## Project Structure
 
 ```
 ImDB-Databases-Project/
-├── public/                  # Static assets and HTML template
+├── index.html               # HTML entry point, loads src/index.jsx
+├── public/                  # Static assets served as-is (favicon, manifest)
 ├── src/
-│   ├── App.js               # Main component: query UI and backend calls
-│   ├── TableComponent.js    # Renders query results in a paginated table
-│   ├── index.js             # React entry point
+│   ├── App.jsx              # Main component: query UI and backend calls
+│   ├── TableComponent.jsx   # Renders query results in a paginated table
+│   ├── index.jsx            # React entry point
+│   ├── App.test.jsx         # Smoke test for the query UI
 │   ├── App.css / index.css  # Styles
-│   └── ...                  # CRA boilerplate (tests, web vitals, etc.)
+│   └── ...                  # Test setup and web vitals helpers
+├── vite.config.mjs          # Vite and Vitest configuration
 ├── package.json
 └── CSE4_560_Milestone2_Triangulation.pdf  # Project milestone report
 ```
 
 ## Notes
 
-- The backend API URL is hard-coded in `src/App.js`; change it to point at your
-  own database service.
+- The project used Create React App (`react-scripts`) until September 2026.
+  CRA is deprecated and pinned old build dependencies with known
+  vulnerabilities, so the build now runs on Vite. `npm start` became
+  `npm run dev`, the dev server moved from port 3000 to 5173, and the build
+  output moved from `build/` to `dist/`.
+- The app reads no environment variables. If you add one, Vite only exposes
+  names starting with `VITE_`, read through `import.meta.env.VITE_NAME`.
+  CRA's `process.env.REACT_APP_*` does not work under Vite.
+- `package.json` has `overrides` for `@material-ui/core` and `react-table-6`.
+  Both libraries declare peer ranges that stop before React 18 but run here on
+  React 18, as they did before the migration. Without the overrides npm
+  refuses to install them (ERESOLVE).
+- The backend API URL is hard-coded in `src/App.jsx`; change it to point at
+  your own database service.
 - This client builds raw SQL strings from user input for the curated views;
   it is intended for use as a course project against a trusted internal
   backend, not as a production application.
 
 ## License
 
-No license file is currently provided. Please contact the repository owner
-before reusing this code.
+MIT. See [LICENSE](LICENSE).

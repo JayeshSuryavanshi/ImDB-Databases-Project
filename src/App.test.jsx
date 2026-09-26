@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders the query prompt and input', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/enter the query!/i)).toBeInTheDocument();
+  expect(screen.getByRole('textbox', { name: /enter the query/i })).toBeInTheDocument();
 });

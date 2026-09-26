@@ -130,5 +130,4 @@ ImDB-Databases-Project/
 
 ## License
 
-No license file is currently provided. Please contact the repository owner
-before reusing this code.
+MIT. See [LICENSE](LICENSE).
